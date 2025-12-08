@@ -1,0 +1,9 @@
+/* Infosys Style Polish */
+.super-app-theme--LowStock {
+  background-color: #fff1f0 !important;
+  transition: background-color 0.3s;
+}
+
+.super-app-theme--LowStock:hover {
+  background-color: #ffccc7 !important;
+}
