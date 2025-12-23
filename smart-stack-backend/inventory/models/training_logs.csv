@@ -1,0 +1,34 @@
+timestamp,sku,days_used,mae,rmse,model_path
+2025-12-08T14:28:10.844317,AUTOMOTIVE,1688,26.8855,36.0218,D:\SmartProject\smart-stack-backend\inventory\models\AUTOMOTIVE.joblib
+2025-12-08T14:28:11.509252,BABY CARE,1688,1.7737,3.573,D:\SmartProject\smart-stack-backend\inventory\models\BABY_CARE.joblib
+2025-12-08T14:28:12.509697,BEAUTY,1688,18.2518,25.2902,D:\SmartProject\smart-stack-backend\inventory\models\BEAUTY.joblib
+2025-12-08T14:28:13.252345,BEVERAGES,1688,7122.0107,10794.4997,D:\SmartProject\smart-stack-backend\inventory\models\BEVERAGES.joblib
+2025-12-08T14:28:13.872595,BOOKS,1688,0.3098,0.9747,D:\SmartProject\smart-stack-backend\inventory\models\BOOKS.joblib
+2025-12-08T14:28:14.471606,BREAD/BAKERY,1688,1082.1091,1560.7288,D:\SmartProject\smart-stack-backend\inventory\models\BREAD_BAKERY.joblib
+2025-12-08T14:28:15.054666,CELEBRATION,1688,37.365,69.9703,D:\SmartProject\smart-stack-backend\inventory\models\CELEBRATION.joblib
+2025-12-08T14:28:15.632175,CLEANING,1688,3092.6863,4483.647,D:\SmartProject\smart-stack-backend\inventory\models\CLEANING.joblib
+2025-12-08T14:28:16.206473,DAIRY,1688,1860.5513,2817.2847,D:\SmartProject\smart-stack-backend\inventory\models\DAIRY.joblib
+2025-12-08T14:28:16.790997,DELI,1688,753.8251,1083.1762,D:\SmartProject\smart-stack-backend\inventory\models\DELI.joblib
+2025-12-08T14:28:17.373890,EGGS,1688,547.7376,774.0579,D:\SmartProject\smart-stack-backend\inventory\models\EGGS.joblib
+2025-12-08T14:28:17.956349,FROZEN FOODS,1688,527.6064,968.2291,D:\SmartProject\smart-stack-backend\inventory\models\FROZEN_FOODS.joblib
+2025-12-08T14:28:18.595499,GROCERY I,1688,11252.3018,16264.123,D:\SmartProject\smart-stack-backend\inventory\models\GROCERY_I.joblib
+2025-12-08T14:28:19.233749,GROCERY II,1688,85.9687,122.4979,D:\SmartProject\smart-stack-backend\inventory\models\GROCERY_II.joblib
+2025-12-08T14:28:19.808741,HARDWARE,1688,7.6316,9.959,D:\SmartProject\smart-stack-backend\inventory\models\HARDWARE.joblib
+2025-12-08T14:28:20.399526,HOME AND KITCHEN I,1688,122.6816,213.3116,D:\SmartProject\smart-stack-backend\inventory\models\HOME_AND_KITCHEN_I.joblib
+2025-12-08T14:28:20.995324,HOME AND KITCHEN II,1688,78.526,132.9166,D:\SmartProject\smart-stack-backend\inventory\models\HOME_AND_KITCHEN_II.joblib
+2025-12-08T14:28:21.663447,HOME APPLIANCES,1688,4.0753,5.432,D:\SmartProject\smart-stack-backend\inventory\models\HOME_APPLIANCES.joblib
+2025-12-08T14:28:22.462860,HOME CARE,1688,713.2352,1543.5282,D:\SmartProject\smart-stack-backend\inventory\models\HOME_CARE.joblib
+2025-12-08T14:28:23.217357,LADIESWEAR,1688,36.3175,68.5362,D:\SmartProject\smart-stack-backend\inventory\models\LADIESWEAR.joblib
+2025-12-08T14:28:23.924517,LAWN AND GARDEN,1688,32.9164,51.4918,D:\SmartProject\smart-stack-backend\inventory\models\LAWN_AND_GARDEN.joblib
+2025-12-08T14:28:24.597199,LINGERIE,1688,32.5797,45.5381,D:\SmartProject\smart-stack-backend\inventory\models\LINGERIE.joblib
+2025-12-08T14:28:25.265659,"LIQUOR,WINE,BEER",1688,562.3015,942.6767,"D:\SmartProject\smart-stack-backend\inventory\models\LIQUOR,WINE,BEER.joblib"
+2025-12-08T14:28:26.037144,MAGAZINES,1688,14.1681,23.9696,D:\SmartProject\smart-stack-backend\inventory\models\MAGAZINES.joblib
+2025-12-08T14:28:26.636040,MEATS,1688,1011.6525,1431.7442,D:\SmartProject\smart-stack-backend\inventory\models\MEATS.joblib
+2025-12-08T14:28:27.225266,PERSONAL CARE,1688,979.0676,1421.2631,D:\SmartProject\smart-stack-backend\inventory\models\PERSONAL_CARE.joblib
+2025-12-08T14:28:27.812057,PET SUPPLIES,1688,16.7083,29.8602,D:\SmartProject\smart-stack-backend\inventory\models\PET_SUPPLIES.joblib
+2025-12-08T14:28:28.394025,PLAYERS AND ELECTRONICS,1688,27.5325,53.8273,D:\SmartProject\smart-stack-backend\inventory\models\PLAYERS_AND_ELECTRONICS.joblib
+2025-12-08T14:28:29.000122,POULTRY,1688,1028.8636,1452.0394,D:\SmartProject\smart-stack-backend\inventory\models\POULTRY.joblib
+2025-12-08T14:28:29.582297,PREPARED FOODS,1688,232.4769,341.2731,D:\SmartProject\smart-stack-backend\inventory\models\PREPARED_FOODS.joblib
+2025-12-08T14:28:30.153400,PRODUCE,1688,3787.3655,7382.4348,D:\SmartProject\smart-stack-backend\inventory\models\PRODUCE.joblib
+2025-12-08T14:28:30.721503,SCHOOL AND OFFICE SUPPLIES,1688,18.428,47.2069,D:\SmartProject\smart-stack-backend\inventory\models\SCHOOL_AND_OFFICE_SUPPLIES.joblib
+2025-12-08T14:28:31.298395,SEAFOOD,1688,72.4514,97.4731,D:\SmartProject\smart-stack-backend\inventory\models\SEAFOOD.joblib
