@@ -1,52 +1,33 @@
-# inventory/management/commands/train_models.py
+# inventory/management/commands/train_models
 
 import os
-from django.core.management.base import BaseCommand
-import pandas as pd
-from inventory.models import Product, Transaction
-from xgboost import XGBRegressor
-
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-import joblib
-from pathlib import Path
-from django.db.models import Sum
-import math
 import datetime
+from pathlib import Path
+import math
+import pandas as pd
+import joblib
+from django.core.management.base import BaseCommand
+from django.db.models import Sum
+from inventory.models import Product, Transaction
+from xgboost import XGBRegressor, plot_importance
 
-
-# Sanitize SKU for safe filename
+# --- Helper: safe filename ---
 def sanitize_filename(name: str):
-    return (
-        name.replace("/", "_")
-            .replace("\\", "_")
-            .replace(" ", "_")
-            .replace(":", "_")
-            .replace("*", "_")
-            .replace("?", "_")
-            .replace('"', "_")
-            .replace("<", "_")
-            .replace(">", "_")
-            .replace("|", "_")
-    )
+    return "".join([c if c.isalnum() else "_" for c in name])
 
-
-# Directories
+# --- Directories ---
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 MODEL_DIR = BASE_DIR / "models"
 LOG_FILE = MODEL_DIR / "training_logs.csv"
-
 MODEL_DIR.mkdir(exist_ok=True)
 
-
 class Command(BaseCommand):
-    help = "Train RandomForestRegressor per SKU using daily-aggregated transactions."
+    help = "Train XGBRegressor per SKU using daily-aggregated transactions."
 
     def add_arguments(self, parser):
-        parser.add_argument("--min-days", type=int, default=30,
-                            help="Minimum number of days of history required to train a model.")
+        parser.add_argument("--min-days", type=int, default=30, help="Minimum days to train a model.")
         parser.add_argument("--n-estimators", type=int, default=100)
-        parser.add_argument("--force", action="store_true",
-                            help="Retrain models even if model file exists")
+        parser.add_argument("--force", action="store_true", help="Overwrite existing models")
 
     def handle(self, *args, **options):
         min_days = options["min_days"]
@@ -60,27 +41,17 @@ class Command(BaseCommand):
 
         # Create log file if not exists
         if not LOG_FILE.exists():
-            pd.DataFrame(columns=[
-                "timestamp",
-                "sku",
-                "days_used",
-                "mae",
-                "rmse",
-                "model_path"
-            ]).to_csv(LOG_FILE, index=False)
+            pd.DataFrame(columns=["timestamp","sku","days_used","mae","rmse","model_path"]).to_csv(LOG_FILE, index=False)
 
         for p in products:
             sku = p.sku
             safe_sku = sanitize_filename(sku)
-
             self.stdout.write(f"Processing SKU: {sku}")
 
-            qs = (
-                Transaction.objects.filter(product=p)
-                .values("date")
-                .annotate(qty=Sum("qty"))
-                .order_by("date")
-            )
+            qs = (Transaction.objects.filter(product=p)
+                  .values("date")
+                  .annotate(qty=Sum("quantity_sold"))
+                  .order_by("date"))
 
             if not qs:
                 self.stdout.write(f" - no transactions for {sku}, skipping")
@@ -91,52 +62,53 @@ class Command(BaseCommand):
             df = df.set_index("date").resample("D").sum().fillna(0)
 
             if len(df) < min_days:
-                self.stdout.write(f" - only {len(df)} days of data; need {min_days}, skipping")
+                self.stdout.write(f" - only {len(df)} days; need {min_days}, skipping")
+                continue
+
+            # Skip SKUs with zero variance
+            if df["qty"].std() == 0:
+                self.stdout.write(f" - SKU {sku} has no variance in qty, skipping")
                 continue
 
             # Feature engineering
             df["lag1"] = df["qty"].shift(1).fillna(0)
             df["lag7"] = df["qty"].shift(7).fillna(0)
             df["dow"] = df.index.dayofweek
-
             df = df.dropna()
 
             X = df[["lag1", "lag7", "dow"]]
             y = df["qty"]
 
-            # Train model
             model = XGBRegressor(
-                    n_estimators=n_estimators,
-                    learning_rate=0.1,
-                    max_depth=6,
-                    subsample=0.9,
-                    colsample_bytree=0.9,
-                    objective="reg:squarederror",
-                    random_state=42,
-                )
-
+                n_estimators=n_estimators,
+                learning_rate=0.1,
+                max_depth=6,
+                subsample=0.9,
+                colsample_bytree=0.9,
+                objective="reg:squarederror",
+                random_state=42,
+            )
             model.fit(X, y)
 
-
-            # Predictions for metric evaluation
             preds = model.predict(X)
-
-            mae = mean_absolute_error(y, preds)
-            rmse = math.sqrt(mean_squared_error(y, preds))
+            mae = math.fabs((y - preds).mean())
+            rmse = math.sqrt(((y - preds) ** 2).mean())
 
             model_path = MODEL_DIR / f"{safe_sku}.joblib"
-
             if model_path.exists() and not force:
                 self.stdout.write(f" - model exists at {model_path}; use --force to overwrite")
                 continue
 
             joblib.dump(model, model_path)
+            self.stdout.write(self.style.SUCCESS(f" - Model saved for {sku} | MAE={mae:.2f} | RMSE={rmse:.2f}"))
 
-            self.stdout.write(self.style.SUCCESS(
-                f" - Model saved for {sku} | MAE={mae:.2f} | RMSE={rmse:.2f}"
-            ))
+            # Feature importance plot (safe)
+            try:
+                plot_importance(model, max_num_features=20, importance_type="weight")
+            except ValueError:
+                self.stdout.write(f" - No feature importance for {sku} (all zero or no splits)")
 
-            # Save training log
+            # Log
             log_row = {
                 "timestamp": datetime.datetime.now().isoformat(),
                 "sku": sku,
@@ -145,9 +117,6 @@ class Command(BaseCommand):
                 "rmse": round(rmse, 4),
                 "model_path": str(model_path)
             }
-
-            log_df = pd.DataFrame([log_row])
-            log_df.to_csv(LOG_FILE, mode="a", header=False, index=False)
+            pd.DataFrame([log_row]).to_csv(LOG_FILE, mode="a", header=False, index=False)
 
         self.stdout.write(self.style.SUCCESS("Training complete. Logs saved."))
-

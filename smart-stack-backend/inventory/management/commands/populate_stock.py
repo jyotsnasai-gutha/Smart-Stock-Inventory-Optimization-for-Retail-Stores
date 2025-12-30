@@ -1,4 +1,4 @@
-import random
+import random 
 from django.core.management.base import BaseCommand
 from inventory.models import Product, Store, Stock
 
