@@ -1,0 +1,2 @@
+- [x] Fix immediate logout after login by handling mock tokens in AuthContext.jsx
+- [x] Test login functionality to ensure user stays logged in
