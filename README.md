@@ -60,6 +60,8 @@ This screenshot shows the Revenue Trend bar chart, representing monthly revenue 
 
  <img width="900" height="430" alt="image" src="https://github.com/user-attachments/assets/6ea3d3ec-75dc-4563-a9f3-69199a48a213" />
 
+ The SmartStock – Inventory Optimization for Retail Stores project successfully delivered a comprehensive inventory management solution capable of tracking products, monitoring stock levels, and analyzing sales and revenue trends. The system improves decision making through visual analytics and automated alerts, helping retail managers minimize stockouts and excess inventory. The project provided significant hands on experience in application development, data handling, and system integration, and contributed to a deeper understanding of retail inventory operations
+
 
 
 
